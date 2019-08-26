@@ -1,0 +1,1 @@
+export const RANGE = 500; //metres between user and farest DB

@@ -6,15 +6,27 @@ export const COLORS = {
 };
 
 export const BUTTONS = {
-    play: {
+    primary: { //play
         bg_color: COLORS.primary_btn,
         txt_color: COLORS.primary_txt,
         padding: 14
     },
-    settings: {
+    gradient_primary: {
+        start: 0,
+        end: 0,
+        startColor: 0,
+        endColor: 0
+    },
+    secondary: { //settings
         bg_color: COLORS.secondary_btn,
         txt_color: COLORS.primary_txt,
         padding: 14
+    },
+    gradient_secondary: {
+        start: 0,
+        end: 0,
+        startColor: 0,
+        endColor: 0
     }
 };
 
