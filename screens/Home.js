@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { theme } from '../constants';
+// import { LinearGradient } from 'expo';
 
 import { Button } from '../components';
 
 import styles from '../styles/homeStyle';
+
+// import LinearGradient from 'react-native-linear-gradient';
 
 /**
  * TODO HERE : 
@@ -35,31 +38,28 @@ export default class Home extends Component {
                 </View>
                 <View style={styles.buttons}>
 
-                    {/* <TouchableOpacity
-                        style={styles.play_button}
-                        onPress={this.play()}
-                        >
-                        <Text style={styles.play_button_txt}>
-                        Play
-                        </Text>
-                    </TouchableOpacity> */}
+                {/* <TouchableOpacity>
+  <LinearGradient start={[0, 0.5]}
+                  end={[1, 0.5]}
+                  colors={['#EFBB35', '#4AAE9B']}
+                  style={{borderRadius: 5}}>
+    <View style={styles.circleGradient}>
+      <Text style={styles.visit}>Login</Text>
+    </View>
+  </LinearGradient>
+</TouchableOpacity> */}
+
+
+
 
                     <Button 
                         theme='primary'
                         gradient
                         text='Play'
-                        onPress={() => this.play()}
-                    />
-
-                    {/* <TouchableOpacity
-                        style={styles.settings_button}
-                        onPress={() => this.goToSettings()}
+                        onPress={() => console.log("test")}
                     >
-                        <Text style={styles.settings_button_txt}>
-                            Settings
-                        </Text>
-                    </TouchableOpacity> */}
-
+                        </Button>
+                        
                     <Button 
                         theme='secondary'
                         gradient
@@ -72,3 +72,20 @@ export default class Home extends Component {
         );
     }
 }
+
+var stylesGradient = StyleSheet.create({
+    linearGradient: {
+      flex: 1,
+      paddingLeft: 15,
+      paddingRight: 15,
+      borderRadius: 5
+    },
+    buttonText: {
+      fontSize: 18,
+      fontFamily: 'Gill Sans',
+      textAlign: 'center',
+      margin: 10,
+      color: '#ffffff',
+      backgroundColor: 'transparent',
+    },
+  });

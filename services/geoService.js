@@ -4,8 +4,8 @@ export default class GeoService {
 
     dragonBallCoords = [];
     userGeoData = {
-        userLat = null,
-        userLong = null
+        userLat: 0,
+        userLong: 0
     }
 
     /**

@@ -1,45 +1,69 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, Text } from 'react-native';
-import { LinearGradient } from 'expo';
+
 
 import { StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo';
 import { theme } from '../constants';
 
-export default class Button extends Component {
+class Button extends Component {
     render(){
 
-        if(this.props.gradient){
+        const {
+            theme,
+            gradient,
+            text,
+            children,
+            ...props
+        } = this.props;
+
+        //dirty code... will have to change that
+        const buttonStyles = eval(`styles.${theme}`);
+        const buttonTextStyle = eval(`styles.${theme}_txt`);
+
+        if(gradient){
+            console.log(this.props)
             return(
                 <TouchableOpacity
-                    style={`styles.gradient_${this.props.theme}`}
+                {...props}
+                    style={buttonStyles}
                 >
-                    <LinearGradient
-                        // start={start}
-                        // end={end}
-                        // locations={locations}
-                        // style={buttonStyles}
-                        // colors={[startColor, endColor]}
-                    >
-                    </LinearGradient>
-                    {/* Add LinearGradient here  */}
+
+
+                    
+                    {/* <LinearGradient
+          colors={['#4c669f', '#3b5998', '#192f6a']}
+          style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+              <Text>
+                  test
+                  </Text>
+              </LinearGradient> */}
+
+
+
+
                     <Text 
-                        style={`styles.${this.props.theme}_txt`}
+                        style={buttonTextStyle}
                     >
-                        {this.props.text}
+                        {text}
                     </Text>
+                    {children}
                 </TouchableOpacity>
             );
         }
         else{
             <TouchableOpacity
-                    style={`styles.${this.props.theme}`}>
-                    <Text style={`styles.${this.props.theme}_txt`}>
-                        {this.props.text}
+                    style={`styles.${theme}`}>
+                    <Text style={`styles.${theme}_txt`}>
+                        {text}
                     </Text>
+                    {children}
                 </TouchableOpacity>
         }
     }
 }
+
+export default Button;
 
 const styles = StyleSheet.create({
     primary:{
