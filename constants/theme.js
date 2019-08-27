@@ -1,13 +1,14 @@
 export const COLORS = {
-    primary_btn: "#ebab38",
-    secondary_btn: "#386724",
+    primary: "#ebab38",
+    secondary: "#386724",
     primary_txt: "#ffffff",
     secondary_txt: "#ffffff",
+    green_bg: '#28b025'
 };
 
 export const BUTTONS = {
     primary: { //play
-        bg_color: COLORS.primary_btn,
+        bg_color: COLORS.primary,
         txt_color: COLORS.primary_txt,
         padding: 14
     },
@@ -18,7 +19,7 @@ export const BUTTONS = {
         endColor: 0
     },
     secondary: { //settings
-        bg_color: COLORS.secondary_btn,
+        bg_color: COLORS.secondary,
         txt_color: COLORS.primary_txt,
         padding: 14
     },

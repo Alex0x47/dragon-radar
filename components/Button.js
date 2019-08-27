@@ -6,6 +6,11 @@ import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo';
 import { theme } from '../constants';
 
+/**
+ * TODO :
+ * Implements LinearGradient (return en error for the moment)
+ */
+
 class Button extends Component {
     render(){
 
