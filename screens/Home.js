@@ -1,40 +1,75 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Image } from 'react-native';
 
-import { theme } from '../constants';
+import { Button } from '../components';
 
 import styles from '../styles/homeStyle';
 
+/**
+ * TODO HERE : 
+ * - Make great buttons (with gradient IF gradient property is given)
+ * - Use a DB typo
+ * - Add 7 Dragon Balls png (with animation later) X
+ * - Set a background ? X => to improve
+ */
+
 export default class Home extends Component {
+
+    static navigationOptions = {
+        header: null,
+      }
+
+
+    goToSettings(){
+        console.log("open settings modal");
+    }
+
+    play(){
+        console.log("go to play screen");
+    }
 
     render(){
         const { navigation } = this.props;
         console.log("rendering home compo", navigation);
         return(
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>Dragon Radar </Text>
-                </View>
-                <View style={styles.buttons}>
-                    <TouchableOpacity
-                        style={styles.play_button}
-                        onPress={() => {console.log("play !")}}
-                    >
-                        <Text style={styles.play_button_txt}>
-                            Play
-                        </Text>
-                    </TouchableOpacity>
+            <SafeAreaView style={styles.container}>
 
-                    <TouchableOpacity
-                        style={styles.settings_button}
-                        onPress={() => {console.log("play !")}}
-                    >
-                        <Text style={styles.settings_button_txt}>
-                            Settings
-                        </Text>
-                    </TouchableOpacity>
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <Image
+                            source={require('../assets/images/Dragon-Ball-Logo-Transparent-PNG.png')}
+                            style={styles.db_logo}
+                            resizeMode="contain"
+                        />
+                        <Image
+                            source={require('../assets/images/radar_img.png')}
+                            style={styles.db_radar_img}
+                            resizeMode="contain"
+                        />
+                    </View>
+
+                    <Image
+                        source={require('../assets/images/dragon_balls2.png')}
+                        style={styles.balls}
+                        resizeMode="contain"
+                    />
+                    
+                    <View style={styles.buttons}>
+                        <Button 
+                            theme='primary'
+                            gradient
+                            text='Play'
+                            onPress={() => console.log("test")}
+                        />
+                        <Button 
+                            theme='secondary'
+                            gradient
+                            text='Settings'
+                            onPress={() => this.goToSettings()}
+                        />
+                    </View>
                 </View>
-            </View>
+            </SafeAreaView>
         );
     }
 }
