@@ -2,7 +2,7 @@ export const RANGE = 500; //metres between user and farest DB
 export let DRAGON_BALLS = [
     {
         id: 1,
-        found: false,
+        found: true,
         image_path: require('../assets/images/ball1.png'),
     },
     {
@@ -35,4 +35,7 @@ export let DRAGON_BALLS = [
         found: false,
         image_path: require('../assets/images/ball7.png'),
     },
-]
+];
+
+export let COLUMNS_NUMBER = 12;
+export let ROW_NUMBER = 18
