@@ -26,33 +26,46 @@ export default class Radar extends Component {
     }
 
     componentDidMount(){
-
-        
         setTimeout(() => {
             //     this.setState({dragon_balls: newDB, ...this.state});
         }, 3000);
         // 
     }
-    
-    changeZoom(){
-        let newColNumber = this.state.col_number == 12 ? 9 : 12;
-        let newRowNumber = this.state.row_number == 18 ? 12 : 18;
-        this.setState({row_number: newRowNumber, col_number: newColNumber});
 
-
-        //emulate a dragon ball the user find
-        let ballFound = this.state.dragon_balls.find(ball => ball.id == 2);
+    /**
+     * Method called when a Dragon Ball is found by the user
+     */
+    findDragonBall(dbId){
+        let ballFound = this.state.dragon_balls.find(ball => ball.id == dbId);
         ballFound.found = true;
     
         let dbFoundIndex = this.state.dragon_balls.findIndex(db => db.id == ballFound.id);
         let newDB = this.state.dragon_balls;
         newDB[dbFoundIndex] = ballFound;
     }
+    
+    /**
+     * Change zoom level
+     */
+    changeZoom(){
+        let newColNumber = this.state.col_number == 12 ? 9 : 12;
+        let newRowNumber = this.state.row_number == 18 ? 12 : 18;
+        this.setState({row_number: newRowNumber, col_number: newColNumber});
 
+        // this.findDragonBall(4);
+        //emulate a dragon ball the user find
+    }
+
+    /**
+     * Draw Dragon Balls on screen
+     */
     drawDragonBalls(){
 
     }
 
+    /**
+     * Start game
+     */
     startGame(){
 
         //every x seconds
@@ -60,27 +73,39 @@ export default class Radar extends Component {
         //updateResult contains found dragon balls, so if not empty animate the screen
     }
 
+    /**
+     * Periodically check if user has moved
+     */
     hasUserMoved(){
 
     }
 
+    /**
+     * Generate row of radar's grid
+     */
     generateRows(){
         let rows = [];
         for(let i = 0 ; i < this.state.col_number ; i ++){
-            rows.push(<View style={styles.radar_square}></View>);
+            rows.push(<View key={i} style={styles.radar_square}></View>);
         }
         return rows;
     }
 
+    /**
+     * Generate cols of radar's grid
+     */
     generateColumns(){
         let cols = [];
         for(let i = 0 ; i < this.state.row_number ; i++){
-            cols.push(<View style={styles.radar_row}>{this.generateRows()}</View>);
+            cols.push(<View key={i} style={styles.radar_row}>{this.generateRows()}</View>);
         }
         console.log("cols", cols);
         return cols;
     }
 
+    /**
+     * Generate radar's grid
+     */
     generateGrid() {
         return(
             <TouchableOpacity style={styles.radar_container} onPress={() => this.changeZoom()}>
