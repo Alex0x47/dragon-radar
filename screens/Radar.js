@@ -8,6 +8,7 @@ import { theme } from '../constants';
 
 import GeoService from '../services/geoService';
 
+
 export default class Radar extends Component {
 
     state = {
@@ -18,10 +19,14 @@ export default class Radar extends Component {
     };
 
     static navigationOptions = {
-        // headerStyle: {
-        //     backgroundColor: theme.COLORS.secondary,
-        // }
-        header: null
+        headerStyle: {
+            backgroundColor: theme.COLORS.secondary,
+            height: height / 14
+        },
+        headerTitle:  <Image
+            source={require('../assets/images/radar_img.png')}
+            style={{ width: 120, height: 70 }}
+        />
         
     }
 
@@ -117,6 +122,10 @@ export default class Radar extends Component {
     render(){
         return (
             <SafeAreaView style={styles.container}>
+                <View style={styles.userPosContainer}>
+                    <View style={styles.userPos}>
+                    </View>
+                </View>
                 <View style={styles.dragonlist}>
                     {
                         this.state.dragon_balls.map(ball => {
@@ -138,8 +147,8 @@ const styles = StyleSheet.create({
     },
     dragonlist: { //parent
         flex: 1,
-        borderRadius: 20,
-        marginTop: height / 20,
+        // borderRadius: 20,
+        // marginTop: height / 20,
         flexDirection: 'row',
         backgroundColor: theme.COLORS.green_bg,
         alignItems: 'center', //horizontal align magic
@@ -171,5 +180,28 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         borderColor: 'black',
         borderWidth: .3
+    },
+    userPosContainer: {
+        position: 'absolute',
+        justifyContent:'center',
+        alignItems: 'center',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
+    },
+    userPos: {
+        width: 0,
+        height: 0,
+        backgroundColor: 'transparent',
+        borderStyle: 'solid',
+        borderTopWidth: 0,
+        borderRightWidth: 12,
+        borderBottomWidth: 24,
+        borderLeftWidth: 12,
+        borderTopColor: 'transparent',
+        borderRightColor: 'transparent',
+        borderBottomColor: 'red',
+        borderLeftColor: 'transparent',
     }
 })
