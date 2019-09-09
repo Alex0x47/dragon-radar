@@ -5,8 +5,8 @@ import Home from '../screens/Home';
 import Radar from '../screens/Radar';
 
 const screens = createStackNavigator({
-	Home: Home,
 	Radar: Radar,
+	Home: Home,
 }, {
 	defaultNavigationOptions: {
 	headerStyle: {

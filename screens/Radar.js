@@ -3,10 +3,11 @@ import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions, Ima
 const { width, height } = Dimensions.get('window');
 
 import { game } from '../constants';
-
 import { theme } from '../constants';
 
 import GeoService from '../services/geoService';
+
+import * as Location from 'expo-location';
 
 
 export default class Radar extends Component {
@@ -31,10 +32,18 @@ export default class Radar extends Component {
     }
 
     componentDidMount(){
+        //get user pos after component init
+        this.state.geoService.getUserPositionFromAPI();
         setTimeout(() => {
             //     this.setState({dragon_balls: newDB, ...this.state});
-        }, 3000);
-        // 
+            // let userPosition = this.state.geoService.getUserPosition();
+            this.drawDragonBalls();
+        }, 1500);
+
+        //watch position move
+        Location.watchPositionAsync({timeInterval: 1000}, newLocation => {
+            console.log("watch position changes", newLocation);
+        });
     }
 
     /**
@@ -65,7 +74,16 @@ export default class Radar extends Component {
      * Draw Dragon Balls on screen
      */
     drawDragonBalls(){
+        console.log('draw dragon balls');
+        let gridHeight = height - 45 - 20; //window height - dragon list height - safety border
+        let gridWidth = width - 20; // window width - safety border
+        
+        //go on a 100 base
+        let drawableWidth = Math.floor((gridWidth * 100) / gridHeight);
+        console.log(`dimensions used to draw : 100m x ${drawableWidth}m`)
 
+        //okay, so DB have to be between userLat - drawableWidth/2 and userLat + drawableWidth/2
+        //and userLong - 50 and userLong + 50
     }
 
     /**
@@ -122,10 +140,6 @@ export default class Radar extends Component {
     render(){
         return (
             <SafeAreaView style={styles.container}>
-                <View style={styles.userPosContainer}>
-                    <View style={styles.userPos}>
-                    </View>
-                </View>
                 <View style={styles.dragonlist}>
                     {
                         this.state.dragon_balls.map(ball => {
@@ -134,6 +148,10 @@ export default class Radar extends Component {
                     }
                 </View>
                     {this.generateGrid()}
+                <View style={styles.userPosContainer}>
+                    <View style={styles.userPos}>
+                    </View>
+                </View>
             </SafeAreaView>
         )
     }
@@ -147,8 +165,6 @@ const styles = StyleSheet.create({
     },
     dragonlist: { //parent
         flex: 1,
-        // borderRadius: 20,
-        // marginTop: height / 20,
         flexDirection: 'row',
         backgroundColor: theme.COLORS.green_bg,
         alignItems: 'center', //horizontal align magic

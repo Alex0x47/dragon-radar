@@ -1,5 +1,8 @@
 import { game } from '../constants/index';
 
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+
 export default class GeoService {
 
     dragonBallCoords = [];
@@ -19,10 +22,20 @@ export default class GeoService {
      * Get user position from geo API
      */
     async getUserPositionFromAPI(){
-        return {
-            lat: 0,
-            long: 0
-        };
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+
+        if (status !== 'granted') {
+            //location permission not granted, handle error => show alert
+            console.error("PERMISSION NOT GRANTED :/")
+            return this.userGeoData; //return last known user pos (could be 0 0)
+        }
+        else{
+            let location = await Location.getCurrentPositionAsync({});
+            // console.log("GOT LOCATION", location);
+            this.userGeoData.userLat = location.coords.latitude;
+            this.userGeoData.userLong = location.coords.longitude;
+            return location;
+        }
     }
 
     /**
@@ -75,7 +88,28 @@ export default class GeoService {
 
     }
 
-    generateDragonBallsCoords(range = game.RANGE){
+    generateDragonBallsCoords(range){
+        range = range || game.RANGE;
+
+        const userPos = {
+            latitude: this.userGeoData.lat,
+            longitude: this.userGeoData.long
+        };
+
+        //npm install --save random-location
+        //import randomLocation from 'random-location'
+
+        while(this.dragonBallCoords.length < 7){
+            const randomPoint = randomLocation.randomCirclePoint(userPos, range / 2);
+            const newDBCoord = {
+                id: this.dragonBallCoords.length ++,
+                lat: randomPoint.latitude,
+                long: randomPoint.longitude
+            };
+            this.dragonBallCoords = [newDBCoord, ...this.dragonBallCoords];
+        }
+
+        return this.dragonBallCoords;
 
     }
 
