@@ -1,4 +1,4 @@
-export const RANGE = 100; //metres between user and farest DB
+export const RANGE = 500; //metres between user and farest DB
 export let DRAGON_BALLS = [
     {
         id: 1,

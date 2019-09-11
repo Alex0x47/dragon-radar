@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions, Image } from 'react-native';
-const { width, height } = Dimensions.get('window');
+import * as Location from 'expo-location';
 
 import { game } from '../constants';
 import { theme } from '../constants';
 
 import GeoService from '../services/geoService';
 
-import * as Location from 'expo-location';
-
+const { width, height } = Dimensions.get('window');
+const GEO_SERVICE = new GeoService();
 
 export default class Radar extends Component {
 
     state = {
-        geoService: new GeoService(),
         dragon_balls: game.DRAGON_BALLS,
+        userPos: {},
         row_number: game.ROW_NUMBER,
         col_number: game.COLUMNS_NUMBER
     };
@@ -33,11 +33,18 @@ export default class Radar extends Component {
 
     componentDidMount(){
         //get user pos after component init
-        this.state.geoService.getUserPositionFromAPI();
+        GEO_SERVICE.getUserPositionFromAPI()
+        .then(userPos => {
+            this.state.userPos = userPos;
+            this.state.dragon_balls = GEO_SERVICE.generateDragonBallsCoords(userPos);
+            this.drawDragonBalls();
+        }).catch(err => {
+            //handle error here
+        });
         setTimeout(() => {
             //     this.setState({dragon_balls: newDB, ...this.state});
             // let userPosition = this.state.geoService.getUserPosition();
-            this.drawDragonBalls();
+            // this.drawDragonBalls();
         }, 1500);
 
         //watch position move
@@ -74,13 +81,28 @@ export default class Radar extends Component {
      * Draw Dragon Balls on screen
      */
     drawDragonBalls(){
-        console.log('draw dragon balls');
+        console.log('draw dragon balls', this.state.dragon_balls);
         let gridHeight = height - 45 - 20; //window height - dragon list height - safety border
         let gridWidth = width - 20; // window width - safety border
         
         //go on a 100 base
         let drawableWidth = Math.floor((gridWidth * 100) / gridHeight);
         console.log(`dimensions used to draw : 100m x ${drawableWidth}m`)
+
+        //calculate distance with user in pixel
+        const firstDB = this.state.dragon_balls[0];
+        const latBetweenDB = this.state.userPos.latitude - firstDB.latitude;
+        const longBetweenDB = this.state.userPos.longitude - firstDB.longitude;
+        console.log("latBetweenDB", latBetweenDB);
+        console.log("longBetweenDB", longBetweenDB);
+
+        const distanceBtwn = GEO_SERVICE.distance(
+            this.state.userPos.latitude,
+            this.state.userPos.longitude,
+            firstDB.latitude,
+            firstDB.longitude
+        );
+        console.log("distance", distanceBtwn);
 
         //okay, so DB have to be between userLat - drawableWidth/2 and userLat + drawableWidth/2
         //and userLong - 50 and userLong + 50
