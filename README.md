@@ -1,11 +1,13 @@
+Currently working on 'radar-page' branch. Wich means all last commits are in this branch. Not stable.
+
 # dragon-radar
 
-### Ce projet n'a pas vocation a être distribué sur les stores ! Je travaille dessus sur mon temps libre pour le fun et pour en faire une démo !
+### I don't plan to publish this app on stores ! I'm just working on this project on my spare time for fun and to show what I can do !
 
-Le Dragon Radar est, dans Dragon Ball, un radar de poche permettant de retrouver les 7 dragon balls, qui elles permettent d'exaucer un souhait.
+The Dragon Radar is, in Dragon Ball, a tiny radar used to find the 7 dragon balls, wich are needed to invoke Shenron who can acoomplish wishes.
 
-Cette application faite avec React Native a pour but de copier ce radar. Dans l'idée, le design du dragon radar de l'anime sera répliqué. Une map avec juste un fond sera dessinée, l'utilisateur sera représenté en son milieu, et 7 points représenteront les 7 boules.
-Tous ces points seront dessinés en fonction de la géolocalisation de l'utilisateur.
-Lorsqu'un utilisateur se rapproche d'une Dragon Ball, il l'obtient ; le but étant de récupérer les 7.
+This app is made with React Native. The goal is to reproduce a Dragon Radar. The design of the manga's radar should be the same. A map with a green background, the user represented by a red triangle, and 7 points representing the 7 dragon balls.
+All of these with will be drawn on the screen using user's geolocation.
+When the user get close to a Dragon Ball, they get it. The goal is to take the 7 dragon balls.
 
-### Ce projet a été commencé fin août et je le code sur mon temps libre. Il avancera donc lentement sans garantie de résultat ;)
+### This project started in August 2019. As i work on it on my spare time, it grows slowly and I'm not even sure I'll finish it, so please, don't judge me :)

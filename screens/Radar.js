@@ -10,13 +10,32 @@ import GeoService from '../services/geoService';
 const { width, height } = Dimensions.get('window');
 const GEO_SERVICE = new GeoService();
 
+import MapView,  { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+
+// const camera = {
+//     center: {
+//        latitude: number,
+//        longitude: number,
+//    },
+//    pitch: number,
+//    heading: number,
+//    zoom: 10
+// }
+
 export default class Radar extends Component {
 
     state = {
         dragon_balls: game.DRAGON_BALLS,
         userPos: {},
         row_number: game.ROW_NUMBER,
-        col_number: game.COLUMNS_NUMBER
+        col_number: game.COLUMNS_NUMBER,
+        region:{
+            latitude: 3.78825,
+            longitude: -12.4324,
+            latitudeDelta: 0.1922,
+            longitudeDelta: 0.0421,
+        },
+        gotPosition: false
     };
 
     static navigationOptions = {
@@ -35,10 +54,26 @@ export default class Radar extends Component {
         //get user pos after component init
         GEO_SERVICE.getUserPositionFromAPI()
         .then(userPos => {
-            this.state.userPos = userPos;
-            this.state.dragon_balls = GEO_SERVICE.generateDragonBallsCoords(userPos);
+            console.log("success", userPos);
+            let generatedDB = GEO_SERVICE.generateDragonBallsCoords(userPos);
+            this.setState({
+                userPos: userPos,
+                dragon_balls: generatedDB,
+                region: {
+                    latitude: userPos.latitude,
+                    longitude: userPos.longitude,
+                    latitudeDelta: 0.009,
+                    longitudeDelta: 0.009
+                },
+                gotPosition: true
+            });
+            console.log("new state", this.state);
             this.drawDragonBalls();
+            setTimeout(() => {
+                // this.mapView.animateCamera({camera: {heading: 320, pitch: 12, altitude: 12}, duration: 1000})
+            }, 2000);
         }).catch(err => {
+            console.log("err", err);
             //handle error here
         });
         setTimeout(() => {
@@ -154,7 +189,8 @@ export default class Radar extends Component {
     generateGrid() {
         return(
             <TouchableOpacity style={styles.radar_container} onPress={() => this.changeZoom()}>
-                {this.generateColumns()}
+                {/* <MapView style={{zIndex: 999999}} /> */}
+                {/* {this.generateColumns()} */}
             </TouchableOpacity>
         );
     }
@@ -169,10 +205,38 @@ export default class Radar extends Component {
                         })
                     }
                 </View>
-                    {this.generateGrid()}
+                    {/* {this.generateGrid()} */}
+                    { this.state.gotPosition && 
+                    <MapView
+                    style={{zIndex: 999999, flex: 7}}
+                    initialRegion={this.state.region}
+                    // provider={PROVIDER_GOOGLE}
+                    customMapStyle={theme.MAP_STYLE}
+                    showsUserLocation={true}
+                    followsUserLocation={true}
+                    rotateEnabled={false}
+                    showsCompass={true}
+                    ref = {(ref)=>this.mapView=ref}
+                    // animateToBearing={{bearing: 2, duration: 2}}
+                    // animateToViewingAngle={{angle: 2, duration: 2}}
+                    > 
+                        {
+                            this.state.dragon_balls.map(dragonBall => {
+                              return  <Marker
+                              key={dragonBall.id}
+                              title="test"
+                              coordinate={dragonBall}
+                              /> 
+                            })
+                        }
+
+                    </MapView>
+                    
+                    }
                 <View style={styles.userPosContainer}>
-                    <View style={styles.userPos}>
-                    </View>
+                    {/* <View style={styles.userPos}>
+                    </View> */}
+                    
                 </View>
             </SafeAreaView>
         )
@@ -182,7 +246,7 @@ export default class Radar extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.COLORS.secondary,
+        // backgroundColor: 'transparent',
         justifyContent: 'center',
     },
     dragonlist: { //parent
@@ -205,6 +269,9 @@ const styles = StyleSheet.create({
     },
     radar_container: {
         flex: 7,
+        // opacity: 0,
+        // backgroundColor: 'transparent',
+        zIndex: 1
         // alignItems: 'center'
     },
     radar_row:{
