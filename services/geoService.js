@@ -1,4 +1,4 @@
-import { game } from '../constants/index';
+import { game } from '../constants';
 
 import randomLocation from 'random-location'
 
@@ -33,12 +33,10 @@ export default class GeoService {
         }
         else{
             location = await Location.getCurrentPositionAsync({});
-            // this.userGeoData.userLat = location.coords.latitude;
-            // this.userGeoData.userLong = location.coords.longitude;
         }
         return new Promise((resolve, reject) => {
             if (status !== 'granted') {
-                reject(location.coords);//return last known user pos (could be 0 0)
+                reject(location.coords);//fix that
             }
             else{
                 console.log("PERM GRANTED");
@@ -92,7 +90,10 @@ export default class GeoService {
 
 
 
-
+    /**
+     * Get the position of a dragon ball
+     * @param {*} id 
+     */
     getDragonBallCoords(id = null){
 
     }
@@ -113,16 +114,19 @@ export default class GeoService {
 
         console.log("generatig with user pos", userPos, "and range", range);
 
-        while(this.dragonBallCoords.length < 7){
+        let dragonBallsArray = [];
+
+        game.DRAGON_BALLS.map(dragonBall => {
             const randomPoint = randomLocation.randomCirclePoint(userPos, range / 2);
-            const newDBCoord = {
-                id: this.dragonBallCoords.length + 1,
+            let dragonBallObject = {
                 latitude: randomPoint.latitude,
-                longitude: randomPoint.longitude
-            };
-            this.dragonBallCoords = [newDBCoord, ...this.dragonBallCoords];
-        }
-        return this.dragonBallCoords;
+                longitude: randomPoint.longitude,
+                ...dragonBall
+            }
+            dragonBallsArray = [dragonBallObject, ...dragonBallsArray];
+        });
+
+        return dragonBallsArray.reverse();
     }
 
 

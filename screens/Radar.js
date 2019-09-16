@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions, Image, Alert } from 'react-native';
 import * as Location from 'expo-location';
 
 import { game } from '../constants';
@@ -11,16 +11,6 @@ const { width, height } = Dimensions.get('window');
 const GEO_SERVICE = new GeoService();
 
 import MapView,  { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-
-// const camera = {
-//     center: {
-//        latitude: number,
-//        longitude: number,
-//    },
-//    pitch: number,
-//    heading: number,
-//    zoom: 10
-// }
 
 export default class Radar extends Component {
 
@@ -54,6 +44,7 @@ export default class Radar extends Component {
         //get user pos after component init
         GEO_SERVICE.getUserPositionFromAPI()
         .then(userPos => {
+            // Alert.alert('position found !');
             console.log("success", userPos);
             let generatedDB = GEO_SERVICE.generateDragonBallsCoords(userPos);
             this.setState({
@@ -68,22 +59,15 @@ export default class Radar extends Component {
                 gotPosition: true
             });
             console.log("new state", this.state);
-            this.drawDragonBalls();
-            setTimeout(() => {
-                // this.mapView.animateCamera({camera: {heading: 320, pitch: 12, altitude: 12}, duration: 1000})
-            }, 2000);
+            // this.drawDragonBalls();
         }).catch(err => {
             console.log("err", err);
             //handle error here
         });
-        setTimeout(() => {
-            //     this.setState({dragon_balls: newDB, ...this.state});
-            // let userPosition = this.state.geoService.getUserPosition();
-            // this.drawDragonBalls();
-        }, 1500);
 
         //watch position move
         Location.watchPositionAsync({timeInterval: 1000}, newLocation => {
+            // Alert.alert('your position has changed !')
             console.log("watch position changes", newLocation);
         });
     }
@@ -114,34 +98,35 @@ export default class Radar extends Component {
 
     /**
      * Draw Dragon Balls on screen
+     * NO NEED FOR THE MOMENT AS WE USE A MAP INSTEAD
      */
-    drawDragonBalls(){
-        console.log('draw dragon balls', this.state.dragon_balls);
-        let gridHeight = height - 45 - 20; //window height - dragon list height - safety border
-        let gridWidth = width - 20; // window width - safety border
+    // drawDragonBalls(){
+    //     console.log('draw dragon balls', this.state.dragon_balls);
+    //     let gridHeight = height - 45 - 20; //window height - dragon list height - safety border
+    //     let gridWidth = width - 20; // window width - safety border
         
-        //go on a 100 base
-        let drawableWidth = Math.floor((gridWidth * 100) / gridHeight);
-        console.log(`dimensions used to draw : 100m x ${drawableWidth}m`)
+    //     //go on a 100 base
+    //     let drawableWidth = Math.floor((gridWidth * 100) / gridHeight);
+    //     console.log(`dimensions used to draw : 100m x ${drawableWidth}m`)
 
-        //calculate distance with user in pixel
-        const firstDB = this.state.dragon_balls[0];
-        const latBetweenDB = this.state.userPos.latitude - firstDB.latitude;
-        const longBetweenDB = this.state.userPos.longitude - firstDB.longitude;
-        console.log("latBetweenDB", latBetweenDB);
-        console.log("longBetweenDB", longBetweenDB);
+    //     //calculate distance with user in pixel
+    //     const firstDB = this.state.dragon_balls[0];
+    //     const latBetweenDB = this.state.userPos.latitude - firstDB.latitude;
+    //     const longBetweenDB = this.state.userPos.longitude - firstDB.longitude;
+    //     console.log("latBetweenDB", latBetweenDB);
+    //     console.log("longBetweenDB", longBetweenDB);
 
-        const distanceBtwn = GEO_SERVICE.distance(
-            this.state.userPos.latitude,
-            this.state.userPos.longitude,
-            firstDB.latitude,
-            firstDB.longitude
-        );
-        console.log("distance", distanceBtwn);
+    //     const distanceBtwn = GEO_SERVICE.distance(
+    //         this.state.userPos.latitude,
+    //         this.state.userPos.longitude,
+    //         firstDB.latitude,
+    //         firstDB.longitude
+    //     );
+    //     console.log("distance", distanceBtwn);
 
-        //okay, so DB have to be between userLat - drawableWidth/2 and userLat + drawableWidth/2
-        //and userLong - 50 and userLong + 50
-    }
+    //     //okay, so DB have to be between userLat - drawableWidth/2 and userLat + drawableWidth/2
+    //     //and userLong - 50 and userLong + 50
+    // }
 
     /**
      * Start game
@@ -189,8 +174,7 @@ export default class Radar extends Component {
     generateGrid() {
         return(
             <TouchableOpacity style={styles.radar_container} onPress={() => this.changeZoom()}>
-                {/* <MapView style={{zIndex: 999999}} /> */}
-                {/* {this.generateColumns()} */}
+                {this.generateColumns()}
             </TouchableOpacity>
         );
     }
@@ -205,38 +189,40 @@ export default class Radar extends Component {
                         })
                     }
                 </View>
-                    {/* {this.generateGrid()} */}
+                
+                {/* Voir pour le suivi de mapfollowsUserLocation */}
+                    {this.generateGrid()}
                     { this.state.gotPosition && 
                     <MapView
-                    style={{zIndex: 999999, flex: 7}}
+                    style={{zIndex: 2, flex: 7}}
                     initialRegion={this.state.region}
-                    // provider={PROVIDER_GOOGLE}
+                    provider={PROVIDER_GOOGLE}
                     customMapStyle={theme.MAP_STYLE}
-                    showsUserLocation={true}
-                    followsUserLocation={true}
+                    showsUserLocation={false}
+                    followsUserLocation={false}
                     rotateEnabled={false}
                     showsCompass={true}
-                    ref = {(ref)=>this.mapView=ref}
-                    // animateToBearing={{bearing: 2, duration: 2}}
-                    // animateToViewingAngle={{angle: 2, duration: 2}}
+                    ref={(ref)=>this.mapView=ref}
+                    zoomEnabled={false}
+                    scrollEnabled={false}
+                    pitchEnabled={false}
                     > 
                         {
                             this.state.dragon_balls.map(dragonBall => {
                               return  <Marker
+                              image={require('../assets/images/dragon_ball_point.png')}
                               key={dragonBall.id}
-                              title="test"
                               coordinate={dragonBall}
                               /> 
                             })
                         }
 
                     </MapView>
-                    
                     }
+
                 <View style={styles.userPosContainer}>
-                    {/* <View style={styles.userPos}>
-                    </View> */}
-                    
+                    <View style={styles.userPos}>
+                    </View>
                 </View>
             </SafeAreaView>
         )
@@ -246,7 +232,7 @@ export default class Radar extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // backgroundColor: 'transparent',
+        backgroundColor: theme.COLORS.secondary,
         justifyContent: 'center',
     },
     dragonlist: { //parent
@@ -260,7 +246,7 @@ const styles = StyleSheet.create({
         width: 45,
         height: 45,
         margin: 4,
-        opacity: 0.3
+        opacity: 0.3,
     },
     found_ball: {
         opacity: 1
@@ -268,11 +254,15 @@ const styles = StyleSheet.create({
     text: {
     },
     radar_container: {
+        position: 'absolute',
         flex: 7,
-        // opacity: 0,
-        // backgroundColor: 'transparent',
-        zIndex: 1
-        // alignItems: 'center'
+        justifyContent:'center',
+        alignItems: 'center',
+        top: height / 10 + 4,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 18
     },
     radar_row:{
         flex: 1,
@@ -293,7 +283,8 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0
+        bottom: 0,
+        zIndex: 20
     },
     userPos: {
         width: 0,
@@ -307,6 +298,6 @@ const styles = StyleSheet.create({
         borderTopColor: 'transparent',
         borderRightColor: 'transparent',
         borderBottomColor: 'red',
-        borderLeftColor: 'transparent',
+        borderLeftColor: 'transparent'
     }
 })
