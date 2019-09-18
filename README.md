@@ -1,4 +1,5 @@
 Currently working on 'radar-page' branch. Wich means all last commits are in this branch. Not stable.
+#### => Master is up to date
 
 # dragon-radar
 
@@ -17,4 +18,4 @@ When the user get close to a Dragon Ball, they get it. The goal is to take the 7
 #### Home Page
 ![home](https://github.com/Alex0x47/dragon-radar/blob/master/screenshots/home_screen.PNG)
 #### Radar Page
-![radar](https://github.com/Alex0x47/dragon-radar/blob/master/screenshots/radar_screen.PNG)
+![radar](https://github.com/Alex0x47/dragon-radar/blob/master/screenshots/radar_screen_finale.PNG)
