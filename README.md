@@ -12,3 +12,9 @@ All of these with will be drawn on the screen using user's geolocation.
 When the user get close to a Dragon Ball, they get it. The goal is to take the 7 dragon balls.
 
 ### This project started in August 2019. As i work on it on my spare time, it grows slowly and I'm not even sure I'll finish it, so please, don't judge me :)
+---
+## Screenshots
+#### Home Page
+![home](https://github.com/Alex0x47/dragon-radar/blob/master/screenshots/home_screen.PNG)
+#### Radar Page
+![radar](https://github.com/Alex0x47/dragon-radar/blob/master/screenshots/radar_screen.PNG)
