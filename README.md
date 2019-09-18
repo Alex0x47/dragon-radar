@@ -7,7 +7,8 @@ Currently working on 'radar-page' branch. Wich means all last commits are in thi
 The Dragon Radar is, in Dragon Ball, a tiny radar used to find the 7 dragon balls, wich are needed to invoke Shenron who can acoomplish wishes.
 
 This app is made with React Native. The goal is to reproduce a Dragon Radar. The design of the manga's radar should be the same. A map with a green background, the user represented by a red triangle, and 7 points representing the 7 dragon balls.
-All of these with be drawn on the screen using user's geolocation.
+
+All of these with will be drawn on the screen using user's geolocation.
 When the user get close to a Dragon Ball, they get it. The goal is to take the 7 dragon balls.
 
 ### This project started in August 2019. As i work on it on my spare time, it grows slowly and I'm not even sure I'll finish it, so please, don't judge me :)

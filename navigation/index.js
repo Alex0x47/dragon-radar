@@ -6,13 +6,14 @@ import Radar from '../screens/Radar';
 
 const screens = createStackNavigator({
 	Home: Home,
-	Radar: Radar
+	Radar: Radar,
 }, {
 	defaultNavigationOptions: {
 	headerStyle: {
 		borderBottomColor: "transparent",
 		elevation: 0, // for android
-	}
+	},
+	headerBackTitle: null
 }}
 );
 

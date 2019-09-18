@@ -16,7 +16,7 @@ import styles from '../styles/homeStyle';
 export default class Home extends Component {
 
     static navigationOptions = {
-        header: null,
+        header: null
       }
 
 
@@ -26,6 +26,7 @@ export default class Home extends Component {
 
     play(){
         console.log("go to play screen");
+        this.props.navigation.navigate('Radar');
     }
 
     render(){
@@ -59,7 +60,7 @@ export default class Home extends Component {
                             theme='primary'
                             gradient
                             text='Play'
-                            onPress={() => console.log("test")}
+                            onPress={() => this.play()}
                         />
                         <Button 
                             theme='secondary'
