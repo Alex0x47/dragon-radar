@@ -6,20 +6,7 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
 export default class GeoService {
-
-    dragonBallCoords = [];
-    userGeoData = {
-        userLat: 0,
-        userLong: 0
-    }
-
-    /**
-     * Return last registred user position
-     */
-    getUserPosition(){
-        return this.userGeoData;
-    }
-
+    
     /**
      * Get user position from geo API
      */
@@ -46,59 +33,6 @@ export default class GeoService {
     }
 
     /**
-     * Set user position
-     * @param {*} position 
-     */
-    setUserCoords(position){
-        this.userGeoData.userLat = position.lat;
-        this.userGeoData.long = position.long;
-    }
-
-    isUserOnDragonBall(){
-        let foundDragonBalls = [];
-        this.dragonBallCoords.map(dragonBall => {
-            //test if DB coords are the same or so as the user ones.
-            //if so, push the found DB id in foundDragonBalls array
-        });
-        return foundDragonBalls;
-    }
-
-    //for test purpose
-    generateUserRandomCoords(){
-
-    }
-
-    /**
-     * Verify if user's position has changed
-     * If so, update their local position
-     */
-    async hasUserMoved(){
-        let newUserPos = await this.getUserPositionFromAPI();
-        if(
-            newUserPos.lat != this.userGeoData.userLat &&
-            newUserPos.long != this.userGeoData.userLong
-        ){
-            //position moved
-            this.setUserCoords(newUserPos);
-            //return found dragon balls if some have been found
-            return this.isUserOnDragonBall();
-        }
-        else { //position hasn't changed
-            return false;
-        } 
-    }
-
-
-
-    /**
-     * Get the position of a dragon ball
-     * @param {*} id 
-     */
-    getDragonBallCoords(id = null){
-
-    }
-
-    /**
      * Generate dragon ball positions with user location
      * @param {*} userPosition 
      * @param {*} range 
@@ -116,6 +50,7 @@ export default class GeoService {
 
         let dragonBallsArray = [];
 
+        //todo : test if user is not to close the the created dragon ball
         game.DRAGON_BALLS.map(dragonBall => {
             const randomPoint = randomLocation.randomCirclePoint(userPos, range / 2);
             let dragonBallObject = {
