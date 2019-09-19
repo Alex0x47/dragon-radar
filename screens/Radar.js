@@ -19,16 +19,17 @@ export default class Radar extends Component {
     state = {
         dragon_balls: game.DRAGON_BALLS,
         userPos: {},
-        row_number: game.ROW_NUMBER,
-        col_number: game.COLUMNS_NUMBER,
+        row_number: game.ZOOM_LEVELS[0].row,
+        col_number: game.ZOOM_LEVELS[0].col,
         region:{
             latitude: 3.78825,
             longitude: -12.4324,
             latitudeDelta: 1,
             longitudeDelta: 1
         },
-        gotPosition: false,
-        zoomLevel: 22
+        gotPosition: true,
+        viewLevel: 1,
+        zoomLevel: game.ZOOM_LEVELS[0].zoom
     };
 
     static navigationOptions = {
@@ -52,6 +53,8 @@ export default class Radar extends Component {
 
             const distanceDelta = Math.exp(Math.log(360) - (this.state.zoomLevel * Math.LN2));
 
+            console.log("zoom to", this.state.zoomLevel);
+
             this.setState({
                 userPos: userPos,
                 dragon_balls: generatedDB,
@@ -71,14 +74,14 @@ export default class Radar extends Component {
         });
 
         //watch position move
-        Location.watchPositionAsync({distanceInterval: 1}, newLocation => {
+        Location.watchPositionAsync({accuracy: Location.Accuracy.High, distanceInterval: 0}, newLocation => {
             console.log("watch position changes", newLocation);
             this.state.dragon_balls.forEach(dragonBall => {
                 if(dragonBall.showOnMap){ //only if ball is shown on map
-                    const distanteToUser = GEO_SERVICE.distance(dragonBall.latitude, dragonBall.longitude, this.state.userPos.latitude, this.state.userPos.longitude);
-                    console.log(`distance from dragon ball ${dragonBall.id} is ${distanteToUser}`)
+                    const distanteToUser = GEO_SERVICE.distance(dragonBall.latitude, dragonBall.longitude, newLocation.coords.latitude, newLocation.coords.longitude);
+                    console.log("distance", distanteToUser);
                     if(distanteToUser <= game.DISTANCE_TO_FIND_DB){ //user has found a dragon ball
-                        Alert.alert("You find the dragon ball N° " + dragonBall.id);
+                        Alert.alert("Congratulations ! You found the dragon ball n° " + dragonBall.id);
                         this.dragonBallFound(dragonBall.id);
                     }
                 }
@@ -105,9 +108,25 @@ export default class Radar extends Component {
      * Change zoom level of grid
      */
     changeZoom(){
-        let newColNumber = this.state.col_number == 12 ? 9 : 12;
-        let newRowNumber = this.state.row_number == 18 ? 12 : 18;
-        this.setState({row_number: newRowNumber, col_number: newColNumber});
+        GEO_SERVICE.getUserPositionFromAPI() //get new location to refresh region
+        .then(userPos => {
+            const newLevelId = this.state.viewLevel == game.ZOOM_LEVELS.length ? 1 : this.state.viewLevel + 1;
+            const newViewLevel = game.ZOOM_LEVELS.find(level => level.id == newLevelId);
+            const newDelta = Math.exp(Math.log(360) - (newViewLevel.zoom * Math.LN2));
+    
+            this.setState({
+                viewLevel: newViewLevel.id,
+                row_number: newViewLevel.row,
+                col_number: newViewLevel.col,
+                zoomLevel: newViewLevel.zoom,
+                region:{
+                    latitude: userPos.latitude,
+                    longitude: userPos.longitude,
+                    latitudeDelta: newDelta,
+                    longitudeDelta: newDelta,
+                }
+            });
+        });
     }
 
     /**
@@ -172,20 +191,20 @@ export default class Radar extends Component {
                     {this.generateGrid()}
                     { this.state.gotPosition && 
                     <MapView
-
+                    // initialRegion={this.state.region}
+                    // followsUserLocation={true}
+                    // rotateEnabled={false}
                     style={{zIndex: 2, flex: 7}}
-                    initialRegion={this.state.region}
-                    provider={PROVIDER_GOOGLE}
-                    customMapStyle={theme.MAP_STYLE_WITH_ROAD}
+                    provider={PROVIDER_GOOGLE} //bug ?
+                    customMapStyle={theme.MAP_STYLE_WITH_ROAD} //bug ?
                     showsUserLocation={true}
-                    followsUserLocation={true}
-                    rotateEnabled={false}
+                    region={this.state.region}
                     > 
                         
                         {
                                 this.state.dragon_balls.map(dragonBall => {
                                     return dragonBall.showOnMap ? 
-                                         <Marker
+                                        <Marker
                                         image={require('../assets/images/dragon_ball_point.png')}
                                         key={dragonBall.id}
                                         coordinate={dragonBall}

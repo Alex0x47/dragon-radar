@@ -347,7 +347,7 @@ export const MAP_STYLE_WITH_ROAD = [
       "elementType": "geometry",
       "stylers": [
         {
-          "color": "#fdfcf8"
+          "color": "#fdfcffff8"
         }
       ]
     },
@@ -409,7 +409,7 @@ export const MAP_STYLE_WITH_ROAD = [
       "featureType": "road.local",
       "stylers": [
         {
-          "visibility": "off"
+          "visibility": "on"
         }
       ]
     },
@@ -418,7 +418,7 @@ export const MAP_STYLE_WITH_ROAD = [
       "elementType": "labels.text.fill",
       "stylers": [
         {
-          "color": "#806b63"
+          "visibility": "off"
         }
       ]
     },
@@ -491,5 +491,14 @@ export const MAP_STYLE_WITH_ROAD = [
           "color": "#92998d"
         }
       ]
-    }
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels.text",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
   ];

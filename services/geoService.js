@@ -52,7 +52,13 @@ export default class GeoService {
 
         //todo : test if user is not to close the the created dragon ball
         game.DRAGON_BALLS.map(dragonBall => {
-            const randomPoint = randomLocation.randomCirclePoint(userPos, range / 2);
+            let randomPoint = randomLocation.randomCirclePoint(userPos, range / 2);
+
+            //prevent dragon ball to be in user area at the beginning
+            while(this.distance(randomPoint.latitude, randomPoint.longitude, userPos.latitude, userPos.longitude) <= (game.DISTANCE_TO_FIND_DB)){
+                randomPoint = randomLocation.randomCirclePoint(userPos, range / 2);
+            }
+
             let dragonBallObject = {
                 latitude: randomPoint.latitude,
                 longitude: randomPoint.longitude,
