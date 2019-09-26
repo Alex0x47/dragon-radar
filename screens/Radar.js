@@ -102,6 +102,20 @@ export default class Radar extends Component {
         newDBs[dbFoundIndex] = ballFound;
 
         this.setState({dragon_balls: newDBs});
+
+        this.areAllDbFound();
+    }
+
+    /**
+     * Verify if all dragon balls have been found
+     * If so, do some action
+     * NOT TESTED
+     */
+    areAllDbFound(){
+        const dbFoundLength = this.state.dragon_balls.filter(db => db.found == true).length;
+        if(dbFoundLength == 7){ //all dragon balls have been found
+            Alert.alert("Congratulaions ! You found all the dragon balls !");
+        }
     }
     
     /**
