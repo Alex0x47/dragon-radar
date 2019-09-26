@@ -63,6 +63,7 @@ export default class Home extends Component {
                             onPress={() => this.play()}
                         />
                         <Button 
+                            disabled={true}
                             theme='secondary'
                             gradient
                             text='Settings'

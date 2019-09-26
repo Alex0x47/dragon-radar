@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image } from 'react-native';
 import { createAppContainer, createStackNavigator } from 'react-navigation'
 
 import Home from '../screens/Home';
@@ -13,7 +14,12 @@ const screens = createStackNavigator({
 		borderBottomColor: "transparent",
 		elevation: 0, // for android
 	},
-	headerBackTitle: null
+	headerBackImage: <Image source={require('../assets/images/back.png')} />,
+	headerBackTitle: null,
+	headerLeftContainerStyle: {
+		alignItems: 'center',
+		marginLeft: 20
+	}
 }}
 );
 

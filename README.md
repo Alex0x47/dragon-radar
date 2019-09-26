@@ -1,5 +1,4 @@
-Currently working on 'radar-page' branch. Wich means all last commits are in this branch. Not stable.
-#### => Master is up to date
+Currently working on 'location' branch. Wich means all last commits are in this branch. Not stable.
 
 # dragon-radar
 

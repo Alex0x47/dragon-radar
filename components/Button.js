@@ -19,6 +19,7 @@ class Button extends Component {
             gradient,
             text,
             children,
+            disabled,
             ...props
         } = this.props;
 
@@ -31,7 +32,8 @@ class Button extends Component {
             return(
                 <TouchableOpacity
                 {...props}
-                    style={buttonStyles}
+                disabled={disabled || false}
+                    style={[buttonStyles, disabled ? styles.disabled_button : null]}
                 >
 
 
@@ -108,5 +110,8 @@ const styles = StyleSheet.create({
         color: theme.BUTTONS.secondary.txt_color,
         fontSize: 20,
         fontWeight: 'bold'
+    },
+    disabled_button:{
+        opacity: 0.5
     }
 });
